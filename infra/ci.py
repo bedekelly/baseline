@@ -14,6 +14,7 @@ from pprint import pprint
 
 
 repo = Repo(os.getcwd(), search_parent_directories=False)
+repo.git.stash()
 
 
 def get_past_environments():
@@ -33,12 +34,14 @@ def get_environments():
 
 def deploy_environment(name, options):
     target = options["checkout"]
-    print(f"Deploying '{name}' using git target <{target}>")
+    print("\n")
+    print(f"ℹ Deploying '{name}' using git target <{target}>")
     repo.git.checkout(target)
-    print("$ git status")
+    print("\n$ git status")
     print(repo.git.status())
     print(f"$ make build {name}")
     print(os.listdir())
+    print("\n")
     repo.git.checkout("main")
 
 
@@ -72,23 +75,49 @@ def save_environments(new_environments):
         json.dump(new_environments, revs_file, indent=2)
 
 
+def delete_environment(env_name):
+    print(f"Deleting deployment of environment: {env_name}")
+
+
 added, deleted, modified = get_env_diff()
 
+past_environments = get_past_environments()
 environments = get_environments()
+new_environments = {**past_environments}
+
 
 for added_environment in added:
     print(f"Deploying new environment: {added_environment}")
-    deploy_environment(added_environment, environments[added_environment])
+    try:
+        deploy_environment(added_environment, environments[added_environment])
+    except Exception as e:
+        print(e)
+    else:
+        new_environments[added_environment] = environments[added_environment]
+
 
 for deleted_environment in deleted:
     print(f"Removing environment: {deleted_environment}")
+    try:
+        delete_environment(deleted_environment)
+    except Exception as e:
+        print(e)
+    else:
+        del new_environments[deleted_environment]
+
 
 for modified_environment in modified:
     print(f"Updating environment: {modified_environment}")
-    deploy_environment(modified_environment, environments[modified_environment])
+    try:
+        deploy_environment(modified_environment, environments[modified_environment])
+    except Exception as e:
+        print(e)
+    else:
+        new_environments[modified_environment] = environments[modified_environment]
 
 if len(added) + len(deleted) + len(modified) == 0:
     print("No changes made.")
 
-envs = get_environments()
-save_environments(envs)
+save_environments(new_environments)
+
+repo.git.stash("pop")
