@@ -59,8 +59,9 @@ def get_env_diff():
         current_commit = repo.rev_parse(current_rev)
         past_commit = repo.rev_parse(past_rev)
 
-        print(modified_env_name, current, past)
-        
+        print(modified_env_name, current_commit, past_commit)
+
+        import pdb;pdb.set_trace()
         
         if current.hexsha != past.hexsha:
             modified_envs.append(modified_env_name)
