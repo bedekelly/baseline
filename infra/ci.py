@@ -120,4 +120,7 @@ if len(added) + len(deleted) + len(modified) == 0:
 
 save_environments(new_environments)
 
-repo.git.stash("pop")
+try:
+    repo.git.stash("pop")
+except git.ex.GitCommandError:
+    pass
