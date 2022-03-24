@@ -31,15 +31,19 @@ def get_environments():
         return environments
 
 
-def deploy_environments(environments):
-    for environment, environment_options in environments.items():
-        target = environment_options["checkout"]
-        print(f"Deploying '{environment}' using git target <{target}>")
-        repo.git.checkout(target)
+def deploy_environment(name, options):
+    target = options["checkout"]
+    print(f"Deploying '{name}' using git target <{target}>")
+    repo.git.checkout(target)
+    print("$ git status")
+    print(repo.git.status())
+    print(f"$ make build {name}")
+    print(os.listdir())
     repo.git.checkout("main")
 
 
 def get_env_diff():
+    """Get the added, removed, and modified environmnents."""
     past_environments = get_past_environments()
     current_environments = get_environments()
 
@@ -63,20 +67,25 @@ def get_env_diff():
 
 
 def save_environments(new_environments):
+    """Cache the commit hash for every revision in our current environments."""
     with open("../parsed_revisions.json", "w") as revs_file:
         json.dump(new_environments, revs_file, indent=2)
 
 
 added, deleted, modified = get_env_diff()
 
+environments = get_environments()
+
 for added_environment in added:
     print(f"Deploying new environment: {added_environment}")
+    deploy_environment(added_environment, environments[added_environment])
 
 for deleted_environment in deleted:
     print(f"Removing environment: {deleted_environment}")
 
 for modified_environment in modified:
     print(f"Updating environment: {modified_environment}")
+    deploy_environment(modified_environment, environments[modified_environment])
 
 if len(added) + len(deleted) + len(modified) == 0:
     print("No changes made.")
