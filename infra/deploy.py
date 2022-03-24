@@ -38,7 +38,31 @@ def deploy_environments(environments):
         repo.git.checkout(target)
         
 
+def get_env_diff():
+    past_environments = get_past_environments()
+    current_environments = get_environments()
+    
+    past_env_names = set(past_environments.keys())
+    current_env_names = set(current_environments.keys())
 
-print(get_past_environments())
-repo.git.checkout("main")
-print(get_environments())
+    deleted_envs = list(past_env_names - current_env_names)
+    added_envs = list(current_env_names - past_env_names)
+    maybe_modified = current_env_names & past_env_names
+    modified_envs = []
+    
+    for modified_env_name in maybe_modified:
+        current_rev = current_environments[modified_env_name]["checkout"]
+        past_rev = past_environments[modified_env_name]["checkout"]
+
+        current = repo.rev_parse(current_rev).hexsha
+        past = repo.rev_parse(past_rev).hexsha
+        
+        if current != past:
+            modified_envs.append(modified_env_name)
+
+    return added_envs, deleted_envs, modified_envs
+
+
+added, deleted, modified = get_env_diff()
+print(f"Added: {added}\nDeleted: {deleted}\nModified: {modified}")
+
