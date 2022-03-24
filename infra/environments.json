@@ -4,7 +4,7 @@
             "checkout": "main"
         },
 	"demo": {
-	    "checkout": "main"
+	    "checkout": "demo"
 	}
     }
 }
