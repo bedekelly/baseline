@@ -122,5 +122,5 @@ save_environments(new_environments)
 
 try:
     repo.git.stash("pop")
-except git.ex.GitCommandError:
+except Exception as e:
     pass
