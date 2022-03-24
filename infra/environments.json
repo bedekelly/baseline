@@ -2,6 +2,9 @@
     "environments": {
         "prod": {
             "checkout": "main"
-        }
+        },
+	"demo": {
+	    "checkout": "abc123"
+	}
     }
 }
