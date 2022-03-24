@@ -38,9 +38,8 @@ def deploy_environment(name, options):
     repo.git.checkout(target)
     print("\n$ git status")
     print(repo.git.status())
-    print(f"$ make build {name}")
+    print(f"\n$ make build {name}")
     print(os.listdir())
-    print("\n")
     repo.git.checkout("main")
 
 
