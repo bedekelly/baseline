@@ -18,18 +18,20 @@ repo.git.checkout("main")
 
 
 def get_past_environments():
-    repo.git.checkout("HEAD^1")
+    repo.git.checkout("HEAD^")
     past_environments = get_environments();
     repo.git.checkout("-")
     return past_environments
 
 
 def get_environments():
+    repo.git.checkout("HEAD")
     with open("infra/environments.json") as environments_file:
         environments_obj = json.loads(environments_file.read())
         environments = environments_obj["environments"]
+        repo.git.checkout("-")
         return environments
-
+    
 
 def deploy_environments(environments):
     for environment, environment_options in environments.items():
@@ -54,10 +56,13 @@ def get_env_diff():
         current_rev = current_environments[modified_env_name]["checkout"]
         past_rev = past_environments[modified_env_name]["checkout"]
 
-        current = repo.rev_parse(current_rev).hexsha
-        past = repo.rev_parse(past_rev).hexsha
+        current_commit = repo.rev_parse(current_rev)
+        past_commit = repo.rev_parse(past_rev)
+
+        print(modified_env_name, current, past)
         
-        if current != past:
+        
+        if current.hexsha != past.hexsha:
             modified_envs.append(modified_env_name)
 
     return added_envs, deleted_envs, modified_envs
