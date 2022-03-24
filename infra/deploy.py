@@ -53,13 +53,11 @@ def get_env_diff():
     modified_envs = []
 
     for modified_env_name in maybe_modified:
-        current_rev = current_environments[modified_env_name]["checkout"]
-        past_rev = past_environments[modified_env_name]["checkout"]
-
+        current_rev = current_environments[modified_env_name]["commit"]
         current_commit = repo.rev_parse(current_rev)
-        past_commit = repo.rev_parse(past_rev)
+        past_commit_hash = past_environments[modified_env_name]["commit"]
 
-        if current_commit.hexsha != past_commit.hexsha:
+        if current_commit.hexsha != past_commit_hash:
             modified_envs.append(modified_env_name)
 
     return added_envs, deleted_envs, modified_envs
@@ -74,4 +72,4 @@ added, deleted, modified = get_env_diff()
 print(f"Added: {added}\nDeleted: {deleted}\nModified: {modified}")
 
 envs = get_environments()
-# save_environments(envs)
+save_environments(envs)
