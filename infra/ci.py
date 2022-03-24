@@ -19,6 +19,10 @@ repo = Repo(os.getcwd(), search_parent_directories=False)
 repo.git.stash()
 
 
+def bold(s):
+    return colored(s, attrs=["bold"])
+
+
 def get_past_environments():
     with open("../parsed_revisions.json") as revs_file:
         parsed_revisions = json.loads(revs_file.read())
@@ -36,11 +40,11 @@ def get_environments():
 
 def deploy_environment(name, options):
     target = options["checkout"]
-    print(f"ℹ Deploying '{colored(name, attrs=['bold'])}' using git target <{target}>")
+    print(f"{bold('ℹ')} Deploying {bold(name)} using git target {bold(target)}>")
     repo.git.checkout(target)
-    print(f"\n{colored('$ git status', attrs=['bold'])}")
+    print(f"\n{bold('$ git status')}")
     print(repo.git.status())
-    print(f"\n{colored('$ make build {name}')}")
+    print(f"\n{bold('$ make build {name}')}")
     print(os.listdir())
     repo.git.checkout("main")
 
