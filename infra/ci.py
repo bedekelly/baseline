@@ -69,7 +69,18 @@ def save_environments(new_environments):
 
 
 added, deleted, modified = get_env_diff()
-print(f"Added: {added}\nDeleted: {deleted}\nModified: {modified}")
+
+for added_environment in added:
+    print(f"Deploying new environment: {added_environment}")
+
+for deleted_environment in deleted:
+    print(f"Removing environment: {deleted_environment}")
+
+for modified_environment in modified:
+    print(f"Updating environment: {modified_environment}")
+
+if len(added) + len(deleted) + len(modified) == 0:
+    print("No changes made.")
 
 envs = get_environments()
 save_environments(envs)
