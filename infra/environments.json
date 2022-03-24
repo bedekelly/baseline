@@ -1,7 +1,7 @@
 {
     "environments": {
         "prod": {
-            "checkout": "e806e8798da0e30e1f53867d2f27ff814b7047a5"
+            "checkout": "main"
         },
 	"demo": {
 	    "checkout": "demo1"
