@@ -24,8 +24,7 @@ def get_past_environments():
 
 def get_environments():
     with open("infra/environments.json") as environments_file:
-        environments_obj = json.loads(environments_file.read())
-        environments = environments_obj["environments"]
+        environments = json.loads(environments_file.read())
         for key in environments.keys():
             commit = repo.rev_parse(environments[key]["checkout"])
             environments[key]["commit"] = commit.hexsha

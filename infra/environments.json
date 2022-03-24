@@ -1,10 +1,8 @@
 {
-  "environments": {
-    "production": {
-      "checkout": "prod"
-    },
-    "demo1": {
-      "checkout": "demo1"
-    }
+  "production": {
+    "checkout": "prod"
+  },
+  "demo1": {
+    "checkout": "demo1"
   }
 }
