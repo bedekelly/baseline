@@ -1,7 +1,7 @@
 {
   "environments": {
     "production": {
-      "checkout": "main"
+      "checkout": "prod"
     },
     "demo1": {
       "checkout": "demo1"
