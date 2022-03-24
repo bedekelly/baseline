@@ -9,6 +9,7 @@ Run from the root directory, as:
 """
 import os
 import json
+import sys
 from git import Repo
 from pprint import pprint
 
@@ -16,7 +17,6 @@ from termcolor import colored
 
 
 repo = Repo(os.getcwd(), search_parent_directories=False)
-repo.git.stash()
 
 
 def bold(s):
@@ -33,14 +33,22 @@ def get_environments():
     with open("infra/environments.json") as environments_file:
         environments = json.loads(environments_file.read())
         for key in environments.keys():
-            commit = repo.rev_parse(environments[key]["checkout"])
-            environments[key]["commit"] = commit.hexsha
+            revision = environments[key]["checkout"]
+            try:
+                commit = repo.rev_parse(revision)
+                environments[key]["commit"] = commit.hexsha
+            except Exception as e:
+                sys.stderr.write(
+                    f"Error in environments.json: revision '{revision}' didn't resolve to anything.\n"
+                )
+                exit(1)
+
         return environments
 
 
 def deploy_environment(name, options):
     target = options["checkout"]
-    print(f"{bold('ℹ')} Deploying {bold(name)} using git target {bold(target)}>")
+    print(f"{bold('ℹ')} Deploying {bold(name)} using git target {bold(target)}")
     repo.git.checkout(target)
     print(f"\n{bold('$ git status')}")
     print(repo.git.status())
@@ -89,7 +97,7 @@ past_environments = get_past_environments()
 environments = get_environments()
 new_environments = {**past_environments}
 
-
+repo.git.stash()
 for added_environment in added:
     try:
         deploy_environment(added_environment, environments[added_environment])
