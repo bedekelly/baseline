@@ -12,6 +12,8 @@ import json
 from git import Repo
 from pprint import pprint
 
+from termcolor import colored
+
 
 repo = Repo(os.getcwd(), search_parent_directories=False)
 repo.git.stash()
@@ -34,11 +36,11 @@ def get_environments():
 
 def deploy_environment(name, options):
     target = options["checkout"]
-    print(f"ℹ Deploying '{name}' using git target <{target}>")
+    print(f"ℹ Deploying '{colored(name, attrs=['bold'])}' using git target <{target}>")
     repo.git.checkout(target)
-    print("\n$ git status")
+    print(f"\n{colored('$ git status', attrs=['bold'])}")
     print(repo.git.status())
-    print(f"\n$ make build {name}")
+    print(f"\n{colored('$ make build {name}')}")
     print(os.listdir())
     repo.git.checkout("main")
 
