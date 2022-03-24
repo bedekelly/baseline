@@ -34,7 +34,6 @@ def get_environments():
 
 def deploy_environment(name, options):
     target = options["checkout"]
-    print("\n")
     print(f"ℹ Deploying '{name}' using git target <{target}>")
     repo.git.checkout(target)
     print("\n$ git status")
@@ -87,7 +86,6 @@ new_environments = {**past_environments}
 
 
 for added_environment in added:
-    print(f"Deploying new environment: {added_environment}")
     try:
         deploy_environment(added_environment, environments[added_environment])
     except Exception as e:
@@ -97,7 +95,6 @@ for added_environment in added:
 
 
 for deleted_environment in deleted:
-    print(f"Removing environment: {deleted_environment}")
     try:
         delete_environment(deleted_environment)
     except Exception as e:
@@ -107,7 +104,6 @@ for deleted_environment in deleted:
 
 
 for modified_environment in modified:
-    print(f"Updating environment: {modified_environment}")
     try:
         deploy_environment(modified_environment, environments[modified_environment])
     except Exception as e:
