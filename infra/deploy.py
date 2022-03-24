@@ -14,21 +14,17 @@ from git import Repo
 
 repo = Repo(os.getcwd(), search_parent_directories=False)
 
-repo.git.checkout("main")
-
 
 def get_past_environments():
-    repo.git.checkout("HEAD^")
-    past_environments = get_environments();
-    repo.git.checkout("-")
-    return past_environments
+    return None
 
 
 def get_environments():
-    repo.git.checkout("HEAD")
     with open("infra/environments.json") as environments_file:
         environments_obj = json.loads(environments_file.read())
         environments = environments_obj["environments"]
+        for key in environments.keys():
+            environments[key]['commit'] = repo.rev_parse(environments[key]['checkout']).hexsha
         repo.git.checkout("-")
         return environments
     
@@ -38,6 +34,7 @@ def deploy_environments(environments):
         target = environment_options["checkout"]
         print(f"Deploying '{environment}' using git target <{target}>")
         repo.git.checkout(target)
+    repo.git.checkout("main")
         
 
 def get_env_diff():
@@ -59,16 +56,13 @@ def get_env_diff():
         current_commit = repo.rev_parse(current_rev)
         past_commit = repo.rev_parse(past_rev)
 
-        print(modified_env_name, current_commit, past_commit)
-
-        import pdb;pdb.set_trace()
-        
-        if current.hexsha != past.hexsha:
+        if current_commit.hexsha != past_commit.hexsha:
             modified_envs.append(modified_env_name)
 
     return added_envs, deleted_envs, modified_envs
 
 
-added, deleted, modified = get_env_diff()
-print(f"Added: {added}\nDeleted: {deleted}\nModified: {modified}")
+# added, deleted, modified = get_env_diff()
+# print(f"Added: {added}\nDeleted: {deleted}\nModified: {modified}")
 
+print(get_environments())

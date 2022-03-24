@@ -1,10 +1,10 @@
 {
-    "environments": {
-        "prod": {
-            "checkout": "main"
-        },
-	"demo": {
-	    "checkout": "demo1"
-	}
+  "environments": {
+    "prod": {
+      "checkout": "main"
+    },
+    "demo": {
+      "checkout": "demo1"
     }
+  }
 }
