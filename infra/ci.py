@@ -86,6 +86,7 @@ def save_environments(new_environments):
 
 def delete_environment(env_name):
     print(f"Deleting deployment of environment: {env_name}")
+    subprocess.check_call(["make", "delete", f"ENV={env_name}"])
 
 
 def deploy():

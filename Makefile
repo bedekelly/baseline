@@ -1,28 +1,50 @@
-.PHONY: clean compile typecheck lint build deploy
+SOURCE_CODE=$(wildcard *.ts *.js *.tsx *.jsx)
 
-# Clean up the targets.
-clean:
-	@echo Cleaning...
-	@echo Cleaned!\\n
+node_modules: package.json
+	yarn
+	touch $@
 
-compile:
+.PHONY: build
+build: node_modules typecheck lint compile
+	@test $(ENV) || (echo "ENV was not set" && exit 1)
+	@echo Building environment $(ENV)...
+	@echo Built environment $(ENV).
+	@echo
+
+.PHONY: compile
+compile: dist
+dist: $(SOURCE_CODE)
 	@echo Compiling...
-	@echo Compiled!\\n
+	@echo Compiled!
+	@echo
+	@touch $@
 
-typecheck:
+.PHONY: typecheck
+typecheck: .make/last_typechecked
+.make/last_typechecked: $(SOURCE_CODE)
 	@echo Type checking...
-	@echo No type errors found!\\n
+	@echo No type errors found!
+	for file in $^; do echo $$file; done
+	@echo
+	@touch $@
 
-lint:
+.PHONY: lint
+lint: .make/last_linted
+.make/last_linted: $(SOURCE_CODE)
 	@echo Linting...
-	@echo No linting errors found.\\n
+	@sleep 5
+	@echo No linting errors found.
+	@touch $@
 
-build:
-	@echo Building environment $(ENV)
-	make clean typecheck lint compile
-	@echo Built environment $(ENV)
+.PHONY: delete
+delete:
+	@echo Deleting environment $(ENV)...
+	@echo Deleted.
+	@echo
 
+.PHONY: deploy
 deploy:
+	@test $(ENV) || (echo "ENV was not set" && exit 1)
 	@echo Deploying environment $(ENV)
-	ls
-	@echo Deployed!\\n
+	@echo Deployed!
+	@echo

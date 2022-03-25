@@ -1,0 +1,8 @@
+{
+  "name": "deployment",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/bedekelly/app.git",
+  "author": "Bede Kelly <contact@bede.io>",
+  "license": "MIT"
+}
