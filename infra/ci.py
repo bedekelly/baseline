@@ -29,7 +29,7 @@ def get_past_environments():
         return json.load(revs_file)
 
 
-def get_environments():
+def get_current_environments():
     with open("infra/environments.json") as environments_file:
         environments = json.loads(environments_file.read())
         for key in environments.keys():
@@ -52,9 +52,11 @@ def deploy_environment(name, options):
     repo.git.checkout(target)
     print(f"\n{bold('$ git rev-parse --short HEAD')}")
     print(repo.git.rev_parse("--short", "HEAD"))
-    print(f"\n{bold(f'$ make build ENV={name}')}")
-    subprocess.check_call(["make", "build", f"ENV={name}"])
-    repo.git.checkout("main")
+    print(f"\n{bold(f'$ make deploy ENV={name}')}")
+    try:
+        subprocess.check_call(["make", "deploy", f"ENV={name}"])
+    finally:
+        repo.git.checkout("main")
 
 
 def get_env_diff(past_environments, current_environments):
@@ -91,7 +93,7 @@ def delete_environment(env_name):
 
 def deploy():
     past_environments = get_past_environments()
-    current_environments = get_environments()
+    current_environments = get_current_environments()
     added, deleted, modified = get_env_diff(past_environments, current_environments)
 
     new_environments = {**past_environments}
