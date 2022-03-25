@@ -1,8 +1,5 @@
 {
   "production": {
     "checkout": "main"
-  },
-  "demo1": {
-    "checkout": "demo1"
   }
 }

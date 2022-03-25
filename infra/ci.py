@@ -57,11 +57,8 @@ def deploy_environment(name, options):
     repo.git.checkout("main")
 
 
-def get_env_diff():
+def get_env_diff(past_environments, current_environments):
     """Get the added, removed, and modified environmnents."""
-    past_environments = get_past_environments()
-    current_environments = get_environments()
-
     past_env_names = set(past_environments.keys())
     current_env_names = set(current_environments.keys())
 
@@ -91,45 +88,56 @@ def delete_environment(env_name):
     print(f"Deleting deployment of environment: {env_name}")
 
 
-added, deleted, modified = get_env_diff()
+def deploy():
+    past_environments = get_past_environments()
+    current_environments = get_environments()
+    added, deleted, modified = get_env_diff(past_environments, current_environments)
 
-past_environments = get_past_environments()
-environments = get_environments()
-new_environments = {**past_environments}
+    new_environments = {**past_environments}
 
-repo.git.stash()
-for added_environment in added:
+    repo.git.stash()
+    for added_environment in added:
+        try:
+            deploy_environment(
+                added_environment, current_environments[added_environment]
+            )
+        except Exception as e:
+            print(e)
+        else:
+            new_environments[added_environment] = current_environments[
+                added_environment
+            ]
+
+    for deleted_environment in deleted:
+        try:
+            delete_environment(deleted_environment)
+        except Exception as e:
+            print(e)
+        else:
+            del new_environments[deleted_environment]
+
+    for modified_environment in modified:
+        try:
+            deploy_environment(
+                modified_environment, current_environments[modified_environment]
+            )
+        except Exception as e:
+            print(e)
+        else:
+            new_environments[modified_environment] = current_environments[
+                modified_environment
+            ]
+
+    if len(added) + len(deleted) + len(modified) == 0:
+        print("No changes made.")
+
+    save_environments(new_environments)
+
     try:
-        deploy_environment(added_environment, environments[added_environment])
+        repo.git.stash("pop")
     except Exception as e:
-        print(e)
-    else:
-        new_environments[added_environment] = environments[added_environment]
+        pass
 
 
-for deleted_environment in deleted:
-    try:
-        delete_environment(deleted_environment)
-    except Exception as e:
-        print(e)
-    else:
-        del new_environments[deleted_environment]
-
-
-for modified_environment in modified:
-    try:
-        deploy_environment(modified_environment, environments[modified_environment])
-    except Exception as e:
-        print(e)
-    else:
-        new_environments[modified_environment] = environments[modified_environment]
-
-if len(added) + len(deleted) + len(modified) == 0:
-    print("No changes made.")
-
-save_environments(new_environments)
-
-try:
-    repo.git.stash("pop")
-except Exception as e:
-    pass
+if __name__ == "__main__":
+    deploy()
