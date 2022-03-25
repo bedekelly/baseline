@@ -100,16 +100,13 @@ def deploy():
 
     repo.git.stash()
     for added_environment in added:
+        current = current_environments[added_environment]
         try:
-            deploy_environment(
-                added_environment, current_environments[added_environment]
-            )
+            deploy_environment(added_environment, current)
         except Exception as e:
             print(e)
         else:
-            new_environments[added_environment] = current_environments[
-                added_environment
-            ]
+            new_environments[added_environment] = current
 
     for deleted_environment in deleted:
         try:
@@ -120,16 +117,13 @@ def deploy():
             del new_environments[deleted_environment]
 
     for modified_environment in modified:
+        current = current_environments[modified_environment]
         try:
-            deploy_environment(
-                modified_environment, current_environments[modified_environment]
-            )
+            deploy_environment(modified_environment, current)
         except Exception as e:
             print(e)
         else:
-            new_environments[modified_environment] = current_environments[
-                modified_environment
-            ]
+            new_environments[modified_environment] = current
 
     if len(added) + len(deleted) + len(modified) == 0:
         print("No changes made.")
