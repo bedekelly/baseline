@@ -12,6 +12,7 @@ import json
 import sys
 from git import Repo
 from pprint import pprint
+import subprocess
 
 from termcolor import colored
 
@@ -25,8 +26,7 @@ def bold(s):
 
 def get_past_environments():
     with open("../parsed_revisions.json") as revs_file:
-        parsed_revisions = json.loads(revs_file.read())
-        return parsed_revisions
+        return json.load(revs_file)
 
 
 def get_environments():
@@ -50,10 +50,10 @@ def deploy_environment(name, options):
     target = options["checkout"]
     print(f"{bold('ℹ')} Deploying {bold(name)} using git target {bold(target)}")
     repo.git.checkout(target)
-    print(f"\n{bold('$ git status')}")
-    print(repo.git.status())
-    print(f"\n{bold('$ make build {name}')}")
-    print(os.listdir())
+    print(f"\n{bold('$ git rev-parse --short HEAD')}")
+    print(repo.git.rev_parse("--short", "HEAD"))
+    print(f"\n{bold(f'$ make build ENV={name}')}")
+    subprocess.check_call(["make", "build", f"ENV={name}"])
     repo.git.checkout("main")
 
 

@@ -20,7 +20,7 @@ lint:
 build:
 	@echo Building environment $(ENV)
 	make clean typecheck lint compile
-	@echo Built environment $(ENV)\\n
+	@echo Built environment $(ENV)
 
 deploy:
 	@echo Deploying environment $(ENV)
