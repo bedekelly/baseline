@@ -19,7 +19,7 @@ help:
 
 node_modules: package.json
 	yarn
-	touch $@
+	@touch $@
 
 .PHONY: build
 build: node_modules lint test compile
@@ -33,17 +33,13 @@ test: unit integration
 .PHONY: unit
 unit: .make/last_unit_tested
 .make/last_unit_tested: $(SOURCE_CODE)
-	@echo Running unit tests...
-	@sleep 3
-	@echo All unit tests passed!
+	@echo No unit tests configured.
 	@touch $@
 
 .PHONY: integration
 integration: .make/last_integration_tested
 .make/last_integration_tested: $(SOURCE_CODE)
-	@echo Running integration tests...
-	@sleep 3
-	@echo All integration tests passed!
+	@echo No integration tests configured.
 	@touch $@
 
 .PHONY: compile
@@ -56,22 +52,19 @@ dist: typecompile
 typecompile: .make/last_typecompiled
 .make/last_typecompiled: $(SOURCE_CODE)
 	node_modules/.bin/tsc
+	@touch $@
 
 .PHONY: typecheck
 typecheck: .make/last_typechecked
 .make/last_typechecked: $(SOURCE_CODE)
-	@echo Type checking files: $^...
 	node_modules/.bin/tsc --noEmit
-	@echo No type errors found!
 	@echo
 	@touch $@
 
 .PHONY: lint
 lint: .make/last_linted
 .make/last_linted: $(SOURCE_CODE)
-	@echo Linting...
-	@sleep 3
-	@echo No linting errors found.
+	@echo No linting configured.
 	@touch $@
 
 .PHONY: delete
