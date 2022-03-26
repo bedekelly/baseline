@@ -65,7 +65,7 @@ typecheck: .make/last_typechecked $(SOURCE_CODE)
 .PHONY: lint
 lint: .make/last_linted .make/last_formatted $(SOURCE_CODE)
 .make/last_linted: $(SOURCE_CODE)
-	$(BIN)/eslint --fix .
+	$(BIN)/eslint --cache --fix .
 	@touch $@
 
 .PHONY: delete
