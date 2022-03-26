@@ -1,4 +1,4 @@
-# bede/app
+# baseline 🏁
 
 A pretty good template for a React app.
 
