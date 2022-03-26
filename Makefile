@@ -49,8 +49,8 @@ unit: .make/unit
 
 .PHONY: integration
 integration: .make/integration
-.make/integration: $(SOURCE_CODE)
-	@echo No integration tests configured.
+.make/integration: $(SOURCE_CODE) $(wildcard integration/*.ts)
+	$(BIN)/playwright test
 	@touch $@
 
 dist: .make/typecheck
