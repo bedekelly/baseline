@@ -4,7 +4,7 @@ A pretty good template for a React app.
 
 Some features it has so far:
 
-- Build/Deploy/Test scripts in a Makefile*
+- Build/Deploy/Test scripts in a Makefile\*
 - Automatic deployment to environments via git tags
 - Fast builds with Vite
 - Hot module reloading
@@ -15,7 +15,7 @@ Some features it has so far:
 - Routing with React-Router (v6)
 - Styling with Tailwind (v3, with JIT)
 
-*i.e., not a package.json script, for easier chaining (e.g. `make lint typecheck test`) and dependency management (e.g. skip linting when there's no change to source files).
+\*i.e., not a package.json script, for easier chaining (e.g. `make lint typecheck test`) and dependency management (e.g. skip linting when there's no change to source files).
 
 # Future Features
 
