@@ -6,7 +6,7 @@
 # Make does this by default with non-phony targets, since it compares
 # everything just by using files' last-modified timestamps.
 
-SOURCE_CODE=$(wildcard *.ts *.js *.tsx *.jsx)
+SOURCE_CODE := $(shell find src -iname "*.tsx")
 
 .PHONY: help
 help:
@@ -14,7 +14,7 @@ help:
 	@echo "targets:"
 	@echo "* deploy"
 	@echo "* build"
-	@echo "* typecheck, lint, compile"
+	@echo "* check (typecheck, lint, compile)"
 	@exit 1
 
 node_modules: package.json
@@ -22,7 +22,7 @@ node_modules: package.json
 	touch $@
 
 .PHONY: build
-build: check compile
+build: node_modules lint test compile
 
 .PHONY: check
 check: node_modules typecheck lint test
@@ -48,19 +48,20 @@ integration: .make/last_integration_tested
 
 .PHONY: compile
 compile: dist
-dist: $(SOURCE_CODE)
-	@echo Compiling...
-	@sleep 3
-	@echo Compiled!
-	@echo
+dist: typecompile
+	node_modules/.bin/vite build
 	@touch $@
+
+.PHONY: typecompile
+typecompile: .make/last_typecompiled
+.make/last_typecompiled: $(SOURCE_CODE)
+	node_modules/.bin/tsc
 
 .PHONY: typecheck
 typecheck: .make/last_typechecked
 .make/last_typechecked: $(SOURCE_CODE)
 	@echo Type checking files: $^...
-	@sleep 3
-	for file in $^; do echo --$$file; done
+	node_modules/.bin/tsc --noEmit
 	@echo No type errors found!
 	@echo
 	@touch $@
@@ -85,3 +86,10 @@ deploy: build
 	@echo Deploying environment $(ENV)
 	@echo Deployed!
 	@echo
+
+
+NPM_BIN = $(shell npm bin)
+
+.PHONY: start
+start: node_modules
+	node_modules/.bin/vite
