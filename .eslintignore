@@ -1,0 +1,9 @@
+dist
+node_modules
+
+# CommonJS config files:
+.eslintrc.js
+babel.config.js
+jest.config.js
+postcss.config.js
+tailwind.config.js

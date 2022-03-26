@@ -2,7 +2,7 @@
   "production": {
     "checkout": "main"
   },
-    "demo": {
-	"checkout": "main"
-    }
+  "demo": {
+    "checkout": "main"
+  }
 }

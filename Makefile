@@ -22,7 +22,13 @@ node_modules: package.json
 	@touch $@
 
 .PHONY: build
-build: node_modules lint test compile
+build: node_modules format lint test compile
+
+.PHONY: format
+format: .make/last_formatted
+.make/last_formatted: $(SOURCE_CODE)
+	node_modules/.bin/prettier --loglevel=warn --write .
+	@touch $@
 
 .PHONY: check
 check: node_modules typecheck lint test
@@ -33,7 +39,7 @@ test: unit integration
 .PHONY: unit
 unit: .make/last_unit_tested
 .make/last_unit_tested: $(SOURCE_CODE)
-	@echo No unit tests configured.
+	node_modules/.bin/jest
 	@touch $@
 
 .PHONY: integration
@@ -44,14 +50,8 @@ integration: .make/last_integration_tested
 
 .PHONY: compile
 compile: dist
-dist: typecompile
+dist: typecheck
 	node_modules/.bin/vite build
-	@touch $@
-
-.PHONY: typecompile
-typecompile: .make/last_typecompiled
-.make/last_typecompiled: $(SOURCE_CODE)
-	node_modules/.bin/tsc
 	@touch $@
 
 .PHONY: typecheck
@@ -62,9 +62,9 @@ typecheck: .make/last_typechecked
 	@touch $@
 
 .PHONY: lint
-lint: .make/last_linted
+lint: .make/last_linted format
 .make/last_linted: $(SOURCE_CODE)
-	@echo No linting configured.
+	node_modules/.bin/eslint --fix .
 	@touch $@
 
 .PHONY: delete
