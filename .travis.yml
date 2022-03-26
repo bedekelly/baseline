@@ -1,4 +1,0 @@
-script: ./infra/ci.sh
-language: python3
-install: python3 -m pip install -r infra/requirements.txt
-dist: bionic
