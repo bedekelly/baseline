@@ -32,7 +32,7 @@ test: unit integration
 
 .PHONY: unit
 unit: .make/last_unit_tested
-.make/last_unit_tested:
+.make/last_unit_tested: $(SOURCE_CODE)
 	@echo Running unit tests...
 	@sleep 3
 	@echo All unit tests passed!
@@ -40,7 +40,7 @@ unit: .make/last_unit_tested
 
 .PHONY: integration
 integration: .make/last_integration_tested
-.make/last_integration_tested:
+.make/last_integration_tested: $(SOURCE_CODE)
 	@echo Running integration tests...
 	@sleep 3
 	@echo All integration tests passed!
