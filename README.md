@@ -14,6 +14,7 @@ Some features it has so far:
 - Autoformatting with Prettier
 - Routing with React-Router (v6)
 - Styling with Tailwind (v3, with JIT)
+- Precommit hooks with Husky
 
 \*i.e., not a package.json script, for easier chaining (e.g. `make lint typecheck test`) and dependency management (e.g. skip linting when there's no change to source files).
 
