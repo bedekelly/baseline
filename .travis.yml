@@ -1,1 +1,3 @@
 script: ./infra/ci.sh
+language: python3
+dist: bionic
