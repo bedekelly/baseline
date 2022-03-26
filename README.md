@@ -5,7 +5,6 @@ A pretty good template for a React app.
 Some features it has so far:
 
 - Build/Deploy/Test scripts in a Makefile\*
-- Automatic deployment to environments via git tags
 - Fast builds with Vite
 - Hot module reloading
 - Unit tests with Jest
@@ -33,3 +32,4 @@ Some features it has so far:
 - Two-token authentication framework (e.g. Cognito, OAuth2)
 - CMS/Authoring
 - Prerender/skeleton build
+- Multi-environment config (i.e. easy solution to create a new environment with a config)
