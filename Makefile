@@ -18,6 +18,7 @@ help:
 	@echo "targets:"
 	@echo "* deploy"
 	@echo "* build"
+	@echo "* serve"
 	@echo "* check (typecheck, lint, dist)"
 	@exit 1
 
@@ -29,42 +30,42 @@ node_modules: package.json
 build: node_modules format lint test dist
 
 .PHONY: format
-format: .make/last_formatted
-.make/last_formatted: $(SOURCE_CODE)
+format: .make/format
+.make/format: $(SOURCE_CODE)
 	$(BIN)/prettier --loglevel=warn --write .
 	@touch $@
 
 .PHONY: check
-check: node_modules typecheck lint test
+check: node_modules .make/typecheck .make/lint test
 
 .PHONY: test
-test: unit integration
+test: .make/unit .make/integration
 
 .PHONY: unit
-unit: .make/last_unit_tested
-.make/last_unit_tested: $(SOURCE_CODE)
+unit: .make/unit
+.make/unit: $(SOURCE_CODE)
 	$(BIN)/jest
 	@touch $@
 
 .PHONY: integration
-integration: .make/last_integration_tested
-.make/last_integration_tested: $(SOURCE_CODE)
+integration: .make/integration
+.make/integration: $(SOURCE_CODE)
 	@echo No integration tests configured.
 	@touch $@
 
-dist: .make/last_typechecked
+dist: .make/typecheck
 	$(BIN)/env-cmd -f .env.$(ENV) $(BIN)/vite build
 
 .PHONY: typecheck
-typecheck: .make/last_typechecked $(SOURCE_CODE)
-.make/last_typechecked: $(SOURCE_CODE)
+typecheck: .make/typecheck $(SOURCE_CODE)
+.make/typecheck: $(SOURCE_CODE)
 	$(BIN)/tsc --noEmit
 	@echo
 	@touch $@
 
 .PHONY: lint
-lint: .make/last_linted .make/last_formatted $(SOURCE_CODE)
-.make/last_linted: $(SOURCE_CODE)
+lint: .make/lint .make/format $(SOURCE_CODE)
+.make/lint: $(SOURCE_CODE)
 	$(BIN)/eslint --cache --fix .
 	@touch $@
 
@@ -75,7 +76,7 @@ delete:
 	@echo
 
 .PHONY: serve
-serve:
+serve: build
 	npx serve dist
 
 .PHONY: deploy
