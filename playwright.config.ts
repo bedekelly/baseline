@@ -1,7 +1,7 @@
-import { PlaywrightTestConfig } from '@playwright/test';
+import { PlaywrightTestConfig } from "@playwright/test";
 
 const config: PlaywrightTestConfig = {
-    testDir: 'integration'
-}
+  testDir: "integration",
+};
 
 export default config;

@@ -5,5 +5,10 @@
     "moduleResolution": "node",
     "types": ["node", "jest"]
   },
-  "include": ["vite.config.ts", "./jest-setup.ts", "integration", "playwright.config.ts"]
+  "include": [
+    "vite.config.ts",
+    "./jest-setup.ts",
+    "integration",
+    "playwright.config.ts"
+  ]
 }
