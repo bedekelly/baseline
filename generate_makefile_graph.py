@@ -1,11 +1,17 @@
 """
 Adapted from ChadsGilbert:
 https://github.com/chadsgilbert/makefile2dot/blob/master/makefile2dot/__init__.py
+
+Requirements:
+    - Python 3
+    - graphviz (System software: brew/apt-get install graphviz)
+    - graphviz (Python library:  python3 -m pip install graphviz)
 """
 
 import subprocess as sp
 import graphviz as gv
 from collections import defaultdict
+
 
 dependency_patterns = [
     ["integration/", "Integration Tests"],
@@ -29,7 +35,9 @@ def stream_database():
                 continue
             if line.isspace():
                 continue
-            if ": " not in line:
+            if "DEFAULT" in line or "SUFFIXES" in line or "Makefile" in line:
+                continue
+            if ": " not in line and not line.strip("\n").endswith(":"):
                 continue
             if line.startswith("\t") or line.startswith("echo"):
                 continue
@@ -47,17 +55,24 @@ def build_graph(stream, **kwargs):
 
     phony_targets = set()
 
+    # Draw all our collected dependencies (e.g. "CSS Source Files") as rectangles.
     for _, name in dependency_patterns:
         graph.node(name, shape="rectangle")
 
     for line in stream:
         target, dependencies = line.split(":")
-        dependencies = dependencies.strip().split(" ")
+        dependencies = [d for d in dependencies.strip().split(" ") if d]
 
+        # Keep a set of all the phony (i.e. non-real-file) targets in the Makefile.
+        # N.B. This only works because this is right at the top of the DB output.
         if target == ".PHONY":
             phony_targets = set(dependencies)
             continue
-        else:
+
+        existing_dependencies = defaultdict(lambda: False)
+
+        # Draw a node only if this target doesn't match an existing pattern (e.g. .CSS).
+        if not any(pattern in target for pattern, _ in dependency_patterns):
             graph.node(
                 target,
                 shape=("circle" if target in phony_targets else "rectangle"),
@@ -65,8 +80,8 @@ def build_graph(stream, **kwargs):
                 color=("#999999" if ".make" in target else "#000000"),
             )
 
-        existing_dependencies = defaultdict(lambda: False)
-
+        # Draw single edges to represent dependencies, e.g. from "format" to
+        # "TypeScript Source".
         for dependency in dependencies:
             should_draw = True
             for pattern, name in dependency_patterns:
@@ -78,8 +93,6 @@ def build_graph(stream, **kwargs):
                     existing_dependencies[dependency] = True
             if should_draw:
                 graph.edge(target, dependency)
-                if "." in dependency and dependency not in phony_targets:
-                    graph.node(dependency, shape="rectangle")
 
     return graph
 
@@ -96,7 +109,6 @@ def makefile2dot(**kwargs):
     graph = build_graph(stream_database(), direction=direction)
     graph.directory = "/tmp/baseline"
     graph.filename = "Dependencies"
-
     graph.view()
 
 

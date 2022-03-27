@@ -1,4 +1,3 @@
-# App Makefile
 # The big benefit of using a Makefile is to avoid pointless re-running of
 # tests, linting, type checking etc., as can often happen with package.json
 # scripts.
@@ -7,10 +6,10 @@
 # everything just by using files' last-modified timestamps.
 
 
-TSX 		:= $(shell find src -iname "*.tsx")
+TS 		:= $(shell find src -iname "*.ts")
 TEST_FILES	:= $(shell find src -iname "*.test.*")
 CSS 		:= $(shell find src -iname "*.css")
-SOURCE 		:= $(JS) $(CSS)
+SOURCE 		:= $(TS) $(CSS)
 
 BIN			:= node_modules/.bin
 SHELL		:= /bin/bash
@@ -47,7 +46,7 @@ test: unit integration
 
 .PHONY: unit
 unit: .make/unit
-.make/unit: $(TSX)
+.make/unit: $(TS) $(TEST_FILES)
 	$(BIN)/jest
 	@touch $@
 
@@ -63,14 +62,14 @@ dist: $(SOURCE)
 
 .PHONY: typecheck
 typecheck: .make/typecheck
-.make/typecheck: $(TSX)
+.make/typecheck: $(TS)
 	$(BIN)/tsc --noEmit
 	@echo
 	@touch $@
 
 .PHONY: lint
 lint: .make/lint
-.make/lint: $(TSX)
+.make/lint: $(TS)
 	$(BIN)/eslint --cache --fix .
 	@touch $@
 
@@ -84,9 +83,8 @@ delete:
 serve: build
 	npx serve dist -c ../serve.json
 
-# Useful for testing.
 .PHONY: serve-existing
-serve-existing:
+serve-existing: dist
 	npx serve dist -c ../serve.json
 
 .PHONY: deploy
@@ -94,9 +92,6 @@ deploy: build
 	@echo Deploying environment $(ENV)
 	@echo Deployed!
 	@echo
-
-
-NPM_BIN = $(shell npm bin)
 
 .PHONY: start
 start: node_modules
