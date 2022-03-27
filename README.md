@@ -16,6 +16,7 @@ Some features it has so far:
 - Precommit hooks with Husky
 - Integration tests with Playwright
 - Visualised dependencies with GraphViz
+- Crash reporting with Rollbar
 
 ## Makefile
 
@@ -80,7 +81,6 @@ make -Bj build  35.86s user 2.73s system 173% cpu 22.263 total
 - Create new API layer microservices with a single command
 - Create new pages with a single command
 - Code splitting
-- Crash reporting
 - Metrics reporting / usage
 - Two-token authentication framework (e.g. Cognito, OAuth2)
 - CMS/Authoring
