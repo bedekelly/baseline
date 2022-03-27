@@ -1,0 +1,3 @@
+script: make check
+language: node
+dist: bionic
