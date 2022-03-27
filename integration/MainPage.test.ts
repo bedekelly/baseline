@@ -6,7 +6,9 @@ test("Homepage should display welcome message", async ({ page }) => {
   await expect(title).toHaveText("Hello, world!");
 });
 
-test("Error page shouldn't be visible", async ({ page }) => {
+test("Error page should be shown when navigating to a nonexistent page", async ({
+  page,
+}) => {
   await page.goto("/non-existent");
   const title = page.locator("h1");
   await expect(title).toHaveText("Page not found.");
