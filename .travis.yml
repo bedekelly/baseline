@@ -1,6 +1,6 @@
 install:
   - npx playwright install
-script: make -B check
+script: make -Bj check
 language: node
 node_js:
   - 17
