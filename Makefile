@@ -9,7 +9,8 @@
 TS 		:= $(shell find src -iname "*.ts")
 TEST_FILES	:= $(shell find src -iname "*.test.*")
 CSS 		:= $(shell find src -iname "*.css")
-SOURCE 		:= $(TS) $(CSS)
+ENV_FILES	:= $(shell find env  -iname "*.env")
+SOURCE 		:= $(TS) $(CSS) $(ENV_FILES)
 
 BIN			:= node_modules/.bin
 SHELL		:= /bin/bash
@@ -30,7 +31,7 @@ node_modules: package.json
 	@touch $@
 
 .PHONY: build
-build: node_modules format lint test typecheck dist
+build: check dist
 
 .PHONY: format
 format: .make/format
@@ -39,7 +40,7 @@ format: .make/format
 	@touch $@
 
 .PHONY: check
-check: node_modules typecheck lint test
+check: node_modules format typecheck lint test
 
 .PHONY: test
 test: unit integration
@@ -56,8 +57,14 @@ integration: .make/integration
 	$(BIN)/playwright test
 	@touch $@
 
-dist: $(SOURCE)
-	$(BIN)/env-cmd -f .env.$(ENV) $(BIN)/vite build
+.PHONY: always-rebuild
+.make/environment: always-rebuild
+	@echo $(ENV) > .make/environment.new
+	@cmp --quiet .make/environment.new .make/environment || cp .make/environment{.new,}
+	@rm .make/environment.new
+
+dist: $(SOURCE) .make/environment
+	$(BIN)/env-cmd -f env/$(ENV).env $(BIN)/vite build
 	@touch $@
 
 .PHONY: typecheck
@@ -95,9 +102,18 @@ deploy: build
 
 .PHONY: start
 start: node_modules
-	$(BIN)/env-cmd -f .env.$(ENV) $(BIN)/vite
+	$(BIN)/env-cmd -f env/$(ENV).env $(BIN)/vite
 
 .PHONY: visualise
 visualise: visualise.pdf
 visualise.pdf:
 	python3 generate_makefile_graph.py
+
+
+.PHONY: build-prod
+build-prod:
+	$(MAKE) -B dist ENV=prod
+
+.PHONY: build-dev
+build-dev:
+	$(MAKE) -B dist ENV=dev

@@ -71,8 +71,6 @@ $ time make -Bj build
 make -Bj build  35.86s user 2.73s system 173% cpu 22.263 total
 ```
 
-
-
 ## Future Features
 
 - Separate NPM package with a design system
