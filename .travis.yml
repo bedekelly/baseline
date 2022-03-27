@@ -1,3 +1,5 @@
 script: make check
 language: node
+node_js:
+  - 17
 dist: bionic
