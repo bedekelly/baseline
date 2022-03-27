@@ -21,11 +21,13 @@ Some features it has so far:
 
 Using a Makefile is probably the most controversial choice here. This is done for a
 few reasons, such as:
-* Ease of chaining together operations (e.g. `make lint format test`)
-* Only running dependencies when needed.
+
+- Ease of chaining together operations (e.g. `make lint format test`)
+- Only running dependencies when needed.
+- Parallel builds
 
 This second one isn't supported by package.json scripts at all, so it's not seen in
-many modern JS projects, but it's incredibly useful. 
+many modern JS projects, but it's incredibly useful.
 
 Consider the situation where you've got a precommit hook set up. You want the strongest
 guarantees about the code you're checking in, so you're running typechecking, unit testing,
@@ -34,7 +36,7 @@ you've just _fixed_ a bug with unit tests, and so you've been running your test 
 
 Another case to consider is fixing a style bug in a CSS file. We'd like to make sure
 nothing is obstructed from view using our integration tests, but there's no point running
-a bunch of unit tests on unrelated components. 
+a bunch of unit tests on unrelated components.
 
 These and more are supported by Make, which uses file modification timestamps to compare
 its "targets" (output files) and "dependencies" (input files) to determined whether it
@@ -44,7 +46,7 @@ Many combinations of scripts are useful in different cases, and despite looking 
 
 ![Big graph showing scary dependency tree](./Dependencies.png)
 
-In this graph, round nodes are "phony" (i.e. they don't correspond to a real file), whereas rectangular nodes are real files like `package.json`, and Unit Tests. 
+In this graph, round nodes are "phony" (i.e. they don't correspond to a real file), whereas rectangular nodes are real files like `package.json`, and Unit Tests.
 
 I've grouped lots of these files together into a single node, which matches up with the way I've used variables in the Makefile. This makes things lots easier to read!
 
@@ -54,6 +56,20 @@ For example, running `make deploy` will depend on the `build` task. The `build` 
 I've also got some greyed-out nodes which are real files, but probably not ones we care about. These are just used to record the last time a command was run, e.g. when unit
 tests last passed. This is useful since running tests might be a slow operation and
 it's useful to skip it if the input files haven't changed.
+
+Parallel builds are a very new feature to me, so I'm not fully confident they're working as planned. It's quite possible that to support parallel builds, it'd make sense to avoid all mutating jobs (e.g. Prettier's `--write` and ESLint's `--fix`).
+
+Unfortunately, all I have in front of me is a dual-core Intel machine, so...
+
+```
+$ time make -B build
+...
+make -B build  34.88s user 2.37s system 143% cpu 25.916 total
+
+$ time make -Bj build
+...
+make -Bj build  35.86s user 2.73s system 173% cpu 22.263 total
+```
 
 
 
