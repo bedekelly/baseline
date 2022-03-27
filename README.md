@@ -19,6 +19,46 @@ Some features it has so far:
 - Crash reporting with Rollbar
 - Code splitting with React.lazy()
 
+## Installation & Running Dev Server
+
+```bash
+$ git clone https://github.com/bedekelly/baseline
+$ make start
+```
+
+## Creating & Serving a Production Build
+
+```bash
+$ make serve
+```
+
+## Tests, Linting, Formatting
+
+```bash
+$ make check        # Linting, unit tests, integration tests, formatting
+$ make lintfix      # ESLint with automatic fixing
+$ make format       # Prettier with automatic fixing
+$ make unit         # Only run unit tests
+$ make integration  # Only run integration tests
+```
+
+## Specifying Environments
+
+```bash
+$ make serve ENV=dev   # Create and serve a production build using `.env.dev` file.
+$ make serve ENV=prod  # Create a production build using `.env.prod` file.
+$ make start ENV=dev   # Start dev server using `.env.dev` file.
+```
+
+## More Commands
+
+```bash
+$ make build           # Create a production build but don't serve it.
+$ make serve-existing  # Serve the existing production build, ignoring dependencies.
+$ make deploy          # Create production build then run deployment script.
+$ make visualise       # Create and open Dependencies PDF (requires Python and GraphViz).
+```
+
 ## Makefile
 
 Using a Makefile is probably the most controversial choice here. This is done for a

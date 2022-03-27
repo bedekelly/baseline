@@ -23,7 +23,7 @@ help:
 	@echo "* deploy"
 	@echo "* build"
 	@echo "* serve"
-	@echo "* check (typecheck, lint, dist)"
+	@echo "* check (checkformat, typecheck, lint, test)"
 	@exit 1
 
 node_modules: package.json
