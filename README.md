@@ -12,13 +12,13 @@ A pretty good template for a React app.
 - Makefile targets to “cache” build steps
 - Fast builds with Vite
 - Code splitting with React.lazy()
-- Precommit hooks with Husky
 
 **Modern Libraries:**
 - Routing with React-Router (v6)
 - Styling with Tailwind (v3, with JIT)
 
 **Code Quality:**
+- Precommit hooks with Husky
 - Linting with ESLint
 - Autoformatting with Prettier
 - Unit tests with Jest (including coverage)
