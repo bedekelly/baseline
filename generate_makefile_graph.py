@@ -18,6 +18,11 @@ dependency_patterns = [
     [".test.", "Unit Tests"],
     [".css", "CSS Source"],
     [".ts", "TypeScript Source"],
+    [".env", "Env files"],
+    # This is slightly changing the semantics of what's going on, since really
+    # the dependency actually *is* the `.make/environment` file. But this makes
+    # the graph make a lot more sense.
+    ["always-rebuild", "Environment Variables"],
 ]
 
 
@@ -35,7 +40,12 @@ def stream_database():
                 continue
             if line.isspace():
                 continue
-            if "DEFAULT" in line or "SUFFIXES" in line or "Makefile" in line:
+            if (
+                "DEFAULT" in line
+                or "SUFFIXES" in line
+                or "Makefile" in line
+                or "always-rebuild:" in line
+            ):
                 continue
             if ": " not in line and not line.strip("\n").endswith(":"):
                 continue
@@ -60,6 +70,7 @@ def build_graph(stream, **kwargs):
         graph.node(name, shape="rectangle")
 
     for line in stream:
+        print(line)
         target, dependencies = line.split(":")
         dependencies = [d for d in dependencies.strip().split(" ") if d]
 

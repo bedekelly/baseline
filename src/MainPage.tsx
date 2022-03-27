@@ -14,7 +14,9 @@ export default function MainPage() {
 
       <button
         className="text-black cursor-pointer text-mono hover:bg-gray-100 px-5 mt-5 py-2 text-3xl font-black text-center rounded-md bg-white"
-        onClick={() => { JSON.parse("{") }}
+        onClick={() => {
+          JSON.parse("{");
+        }}
       >
         Click me for an error.
       </button>

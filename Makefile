@@ -6,7 +6,7 @@
 # everything just by using files' last-modified timestamps.
 
 
-TS 		:= $(shell find src -iname "*.ts")
+TS 			:= $(shell find src -iname "*.ts")
 TEST_FILES	:= $(shell find src -iname "*.test.*")
 CSS 		:= $(shell find src -iname "*.css")
 ENV_FILES	:= $(shell find env  -iname "*.env")
@@ -35,25 +35,25 @@ build: check dist
 
 .PHONY: format
 format: .make/format
-.make/format: $(SOURCE)
+.make/format: $(SOURCE) node_modules
 	$(BIN)/prettier --loglevel=warn --write .
 	@touch $@
 
 .PHONY: check
-check: node_modules format typecheck lint test
+check: format typecheck lint test
 
 .PHONY: test
 test: unit integration
 
 .PHONY: unit
 unit: .make/unit
-.make/unit: $(TS) $(TEST_FILES)
+.make/unit: $(TS) $(TEST_FILES) node_modules
 	$(BIN)/jest
 	@touch $@
 
 .PHONY: integration
 integration: .make/integration
-.make/integration: $(SOURCE) $(wildcard integration/*.ts) playwright.config.ts
+.make/integration: $(SOURCE) $(wildcard integration/*.ts) playwright.config.ts node_modules
 	$(BIN)/playwright test
 	@touch $@
 
@@ -63,20 +63,20 @@ integration: .make/integration
 	@cmp --quiet .make/environment.new .make/environment || cp .make/environment{.new,}
 	@rm .make/environment.new
 
-dist: $(SOURCE) .make/environment
+dist: $(SOURCE) .make/environment node_modules
 	$(BIN)/env-cmd -f env/$(ENV).env $(BIN)/vite build
 	@touch $@
 
 .PHONY: typecheck
 typecheck: .make/typecheck
-.make/typecheck: $(TS)
+.make/typecheck: $(TS) node_modules
 	$(BIN)/tsc --noEmit
 	@echo
 	@touch $@
 
 .PHONY: lint
 lint: .make/lint
-.make/lint: $(TS)
+.make/lint: $(TS) node_modules
 	$(BIN)/eslint --cache --fix .
 	@touch $@
 
@@ -108,12 +108,3 @@ start: node_modules
 visualise: visualise.pdf
 visualise.pdf:
 	python3 generate_makefile_graph.py
-
-
-.PHONY: build-prod
-build-prod:
-	$(MAKE) -B dist ENV=prod
-
-.PHONY: build-dev
-build-dev:
-	$(MAKE) -B dist ENV=dev
