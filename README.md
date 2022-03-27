@@ -14,12 +14,13 @@ Some features it has so far:
 - Routing with React-Router (v6)
 - Styling with Tailwind (v3, with JIT)
 - Precommit hooks with Husky
+- Integration tests with Playwright
+- Visualised dependencies with GraphViz
 
 \*i.e., not a package.json script, for easier chaining (e.g. `make lint typecheck test`) and dependency management (e.g. skip linting when there's no change to source files).
 
 # Future Features
 
-- Integration tests
 - Separate NPM package with a design system
 - Develop with that package locally with hot reloading
 - Scripts for running with local vs remote copy of design system package

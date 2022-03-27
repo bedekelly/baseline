@@ -7,7 +7,11 @@
 # everything just by using files' last-modified timestamps.
 
 
-SOURCE_CODE := $(shell find src -iname "*.tsx")
+TSX 		:= $(shell find src -iname "*.tsx")
+TEST_FILES	:= $(shell find src -iname "*.test.*")
+CSS 		:= $(shell find src -iname "*.css")
+SOURCE 		:= $(JS) $(CSS)
+
 BIN			:= node_modules/.bin
 SHELL		:= /bin/bash
 ENV			:= dev
@@ -27,45 +31,46 @@ node_modules: package.json
 	@touch $@
 
 .PHONY: build
-build: node_modules format lint test dist
+build: node_modules format lint test typecheck dist
 
 .PHONY: format
 format: .make/format
-.make/format: $(SOURCE_CODE)
+.make/format: $(SOURCE)
 	$(BIN)/prettier --loglevel=warn --write .
 	@touch $@
 
 .PHONY: check
-check: node_modules .make/typecheck .make/lint test
+check: node_modules typecheck lint test
 
 .PHONY: test
-test: .make/unit .make/integration
+test: unit integration
 
 .PHONY: unit
 unit: .make/unit
-.make/unit: $(SOURCE_CODE)
+.make/unit: $(TSX)
 	$(BIN)/jest
 	@touch $@
 
 .PHONY: integration
 integration: .make/integration
-.make/integration: $(SOURCE_CODE) $(wildcard integration/*.ts)
+.make/integration: $(SOURCE) $(wildcard integration/*.ts) playwright.config.ts
 	$(BIN)/playwright test
 	@touch $@
 
-dist: .make/typecheck
+dist: $(SOURCE)
 	$(BIN)/env-cmd -f .env.$(ENV) $(BIN)/vite build
+	@touch $@
 
 .PHONY: typecheck
-typecheck: .make/typecheck $(SOURCE_CODE)
-.make/typecheck: $(SOURCE_CODE)
+typecheck: .make/typecheck
+.make/typecheck: $(TSX)
 	$(BIN)/tsc --noEmit
 	@echo
 	@touch $@
 
 .PHONY: lint
-lint: .make/lint .make/format $(SOURCE_CODE)
-.make/lint: $(SOURCE_CODE)
+lint: .make/lint
+.make/lint: $(TSX)
 	$(BIN)/eslint --cache --fix .
 	@touch $@
 
@@ -77,7 +82,12 @@ delete:
 
 .PHONY: serve
 serve: build
-	npx serve dist
+	npx serve dist -c ../serve.json
+
+# Useful for testing.
+.PHONY: serve-existing
+serve-existing:
+	npx serve dist -c ../serve.json
 
 .PHONY: deploy
 deploy: build
@@ -91,3 +101,8 @@ NPM_BIN = $(shell npm bin)
 .PHONY: start
 start: node_modules
 	$(BIN)/env-cmd -f .env.$(ENV) $(BIN)/vite
+
+.PHONY: visualise
+visualise: visualise.pdf
+visualise.pdf:
+	python3 generate_makefile_graph.py
