@@ -1,26 +1,35 @@
 # baseline 🏁
 
-A pretty good template for a React app.
-
 [![Build Status](https://app.travis-ci.com/bedekelly/baseline.svg?token=kgeEVrjr8Gq22pbFZQKn&branch=main)](https://app.travis-ci.com/bedekelly/baseline)
 ![Lighthouse Score: 100](https://img.shields.io/badge/Lighthouse%20Score-100-brightgreen)
 
-Some features it has so far:
+A pretty good template for a React app.
 
-- Build/Deploy/Test scripts in a Makefile
+## Features
+
+
+**Performance & Production-Readiness**
+- Makefile targets to “cache” build steps
 - Fast builds with Vite
-- Hot module reloading
-- Unit tests with Jest
-- Feature flags with Flagsmith
-- Linting with ESLint
-- Autoformatting with Prettier
+- Code splitting with React.lazy()
+- Precommit hooks with Husky
+
+**Modern Libraries:**
 - Routing with React-Router (v6)
 - Styling with Tailwind (v3, with JIT)
-- Precommit hooks with Husky to check linting, formatting and tests
+
+**Code Quality:**
+- Linting with ESLint
+- Autoformatting with Prettier
+- Unit tests with Jest (including coverage)
 - Integration tests with Playwright
-- Visualised dependencies with GraphViz
+- Visualised build dependencies with GraphViz
+
+**Third-Party Providers**
+- Feature flags with Flagsmith
 - Crash reporting with Rollbar
-- Code splitting with React.lazy()
+- CI testing, linting and formatting with Travis
+
 
 ## Installation & Running Dev Server
 
