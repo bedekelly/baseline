@@ -11,6 +11,13 @@ export default function MainPage() {
       <h1 className="text-white text-mono text-5xl font-black text-center font-mono">
         Hello, world!
       </h1>
+
+      <button
+        className="text-black cursor-pointer text-mono hover:bg-gray-100 px-5 mt-5 py-2 text-3xl font-black text-center rounded-md bg-white"
+        onClick={() => { JSON.parse("{") }}
+      >
+        Click me for an error.
+      </button>
     </div>
   );
 }
