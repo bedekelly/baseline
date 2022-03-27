@@ -1,4 +1,5 @@
 import { useFlags } from "flagsmith/react";
+import { Link } from "react-router-dom";
 
 export default function MainPage() {
   const flags = useFlags(["background_color"]);
@@ -13,13 +14,19 @@ export default function MainPage() {
       </h1>
 
       <button
-        className="text-black cursor-pointer text-mono hover:bg-gray-100 px-5 mt-5 py-2 text-3xl font-black text-center rounded-md bg-white"
+        className="text-black cursor-pointer text-mono hover:bg-gray-300 px-5 mt-5 py-2 text-3xl font-black text-center rounded-md bg-white"
         onClick={() => {
           JSON.parse("{");
         }}
       >
         Click me for an error.
       </button>
+      <Link
+        className="text-black cursor-pointer text-mono hover:bg-gray-300 px-5 mt-5 py-2 text-3xl font-black text-center rounded-md bg-white"
+        to="/asdf"
+      >
+        Go to 404 page.
+      </Link>
     </div>
   );
 }
