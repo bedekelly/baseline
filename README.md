@@ -141,7 +141,6 @@ make -Bj build  35.86s user 2.73s system 173% cpu 22.263 total
 - Automatic feature/demo branch deployment
 - Create new API layer microservices with a single command
 - Create new pages with a single command
-- Code splitting
 - Metrics reporting / usage
 - Two-token authentication framework (e.g. Cognito, OAuth2)
 - CMS/Authoring
