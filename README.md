@@ -17,6 +17,7 @@ Some features it has so far:
 - Integration tests with Playwright
 - Visualised dependencies with GraphViz
 - Crash reporting with Rollbar
+- Code splitting with React.lazy()
 
 ## Makefile
 
