@@ -39,8 +39,15 @@ format: .make/format
 	$(BIN)/prettier --loglevel=warn --write .
 	@touch $@
 
+
+.PHONY: checkformat
+checkformat: .make/checkformat
+.make/checkformat: $(SOURCE) node_modules
+	$(BIN)/prettier -c --loglevel=warn .
+	@touch $@
+
 .PHONY: check
-check: format typecheck lint test
+check: checkformat typecheck lint test
 
 .PHONY: test
 test: unit integration
@@ -77,6 +84,11 @@ typecheck: .make/typecheck
 .PHONY: lint
 lint: .make/lint
 .make/lint: $(TS) node_modules
+	$(BIN)/eslint --cache .
+	@touch $@
+
+.PHONY: lintfix
+lintfix: $(TS) node_modules
 	$(BIN)/eslint --cache --fix .
 	@touch $@
 
