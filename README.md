@@ -27,25 +27,29 @@ few reasons, such as:
 - Only running dependencies when needed.
 - Parallel builds
 
-This second one isn't supported by package.json scripts at all, so it's not seen in
-many modern JS projects, but it's incredibly useful.
-
-Consider the situation where you've got a precommit hook set up. You want the strongest
-guarantees about the code you're checking in, so you're running typechecking, unit testing,
-integration testing, linting, and more when you commit code. This gets quite annoying when
-you've just _fixed_ a bug with unit tests, and so you've been running your test suite anyway.
-
-Another case to consider is fixing a style bug in a CSS file. We'd like to make sure
-nothing is obstructed from view using our integration tests, but there's no point running
-a bunch of unit tests on unrelated components.
-
-These and more are supported by Make, which uses file modification timestamps to compare
-its "targets" (output files) and "dependencies" (input files) to determined whether it
-needs to run the script again.
-
-Many combinations of scripts are useful in different cases, and despite looking a bit intimidating, this configuration seems like a good setup so far:
+This setup looks intimidating, but I've listed some examples of how to interpret the graph below.
 
 ![Big graph showing scary dependency tree](./Dependencies.png)
+
+### Example 1: Building & Serving the App
+1. Run `make serve`
+2. `serve` depends on the app having been built, aka the `build` job.
+3. `build` depends on a code quality `check`, and then creates the `dist` folder.
+4. `check` runs `test`ing, `lint`ing, `typecheck`ing, and `format`ing on the codebase
+5. `test` runs both `unit` and `integration` tests.
+6. `unit` tests rely on the files marked as `Unit Tests`, the `node_modules`, and the `TypeScript Source` -- but they don't rely on the CSS source or the Env files, for example.
+
+There's some magic here with the grayed-out file labeled `.make/unit`. This is a timestamp we create so that Make can see when we last ran unit tests, and compare that against the latest changes to the unit test files. If there are recent changes to the unit test files, we run the suite of unit tests again; if not, we can safely skip it!
+
+### Example 2: Commit Hooks
+1. Run `make check` while developing a new feature
+2. Edit a CSS source file
+3. Run `make serve` to run a file server.
+
+Here, `make serve` depends on `build`, which depends on `check`. `check` will run both unit and integration tests. **However**, because `unit` doesn't depend on the CSS source files, Make knows we can safely skip it. We do re-run integration tests, since by using a library like Playwright we can check if our CSS changes have [obscured a previously-visible element](https://playwright.dev/docs/actionability).
+
+
+## Interpreting the Makefile Graph
 
 In this graph, round nodes are "phony" (i.e. they don't correspond to a real file), whereas rectangular nodes are real files like `package.json`, and Unit Tests.
 
@@ -54,10 +58,13 @@ I've grouped lots of these files together into a single node, which matches up w
 To interpret the graph, look at the bottom commands and what they depend on.
 For example, running `make deploy` will depend on the `build` task. The `build` task in turn depends on `node_modules`, `test`, `typecheck`, `lint`, `format`, and `dist`, and so on.
 
-I've also got some greyed-out nodes which are real files, but probably not ones we care about. These are just used to record the last time a command was run, e.g. when unit
+I've also got some greyed-out nodes which are real files, but probably not ones we care about. These are used to record the last time a command was run, e.g. when unit
 tests last passed. This is useful since running tests might be a slow operation and
 it's useful to skip it if the input files haven't changed.
 
+
+
+## Parallel Builds
 Parallel builds are a very new feature to me, so I'm not fully confident they're working as planned. It's quite possible that to support parallel builds, it'd make sense to avoid all mutating jobs (e.g. Prettier's `--write` and ESLint's `--fix`).
 
 Unfortunately, all I have in front of me is a dual-core Intel machine, so...
