@@ -1,4 +1,4 @@
-script: make check
+script: make -B check
 language: node
 node_js:
   - 17
