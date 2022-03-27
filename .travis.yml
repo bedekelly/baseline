@@ -1,3 +1,5 @@
+install:
+  - npx playwright install
 script: make -B check
 language: node
 node_js:
