@@ -31,17 +31,17 @@ A pretty good template for a React app.
 - CI testing, linting and formatting with Travis
 
 
-## Installation & Running Dev Server
+## Quickstart: Install & Run Dev Server
 
 ```bash
-$ git clone https://github.com/bedekelly/baseline
-$ make start
+git clone https://github.com/bedekelly/baseline app
+cd app; make start
 ```
 
 ## Creating & Serving a Production Build
 
 ```bash
-$ make serve
+make serve
 ```
 
 ## Tests, Linting, Formatting
