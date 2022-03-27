@@ -1,7 +1,7 @@
-import MainPage from "./MainPage";
+import MainPage from "./pages/MainPage";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import React, { Suspense } from "react";
-const PageNotFound = React.lazy(() => import("./PageNotFound"));
+const PageNotFound = React.lazy(() => import("./pages/NotFoundPage"));
 
 export default function App() {
   return (

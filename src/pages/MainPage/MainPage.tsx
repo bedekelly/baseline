@@ -21,7 +21,7 @@ export default function MainPage() {
         className="text-black cursor-pointer text-mono hover:bg-gray-300 px-5 mt-5 py-2 text-3xl font-black text-center rounded-md bg-white"
         onClick={throwError}
       >
-        Click me for an error.
+        Click me to throw an error.
       </button>
       <Link
         className="text-black cursor-pointer text-mono hover:bg-gray-300 px-5 mt-5 py-2 text-3xl font-black text-center rounded-md bg-white"

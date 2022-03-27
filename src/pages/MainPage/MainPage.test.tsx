@@ -24,7 +24,9 @@ test("Error button", async () => {
       <MainPage />
     </MemoryRouter>
   );
-  const button = screen.getByRole("button", { name: "Click me for an error." });
+  const button = screen.getByRole("button", {
+    name: "Click me to throw an error.",
+  });
   userEvent.click(button);
   expect(throwError).toHaveBeenCalledTimes(1);
 });
