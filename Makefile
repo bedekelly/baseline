@@ -55,7 +55,7 @@ test: unit integration
 .PHONY: unit
 unit: .make/unit
 .make/unit: $(TS) $(TEST_FILES) node_modules
-	$(BIN)/jest
+	$(BIN)/jest --coverage
 	@touch $@
 
 .PHONY: integration
@@ -90,13 +90,15 @@ lint: .make/lint
 .PHONY: lintfix
 lintfix: $(TS) node_modules
 	$(BIN)/eslint --cache --fix .
-	@touch $@
 
 .PHONY: delete
 delete:
 	@echo Deleting environment $(ENV)...
 	@echo Deleted.
 	@echo
+
+.PHONY: fix
+fix: lintfix format
 
 .PHONY: serve
 serve: build
