@@ -6,15 +6,9 @@ import throwError from "./throwError";
 import { useFlags } from "flagsmith/react";
 
 const { useFlags: realUseFlags } = jest.requireActual("flagsmith/react");
-const mockUseFlags = useFlags as jest.MockedFunction<typeof realUseFlags>;
-
-jest.mock("flagsmith/react", () => {
-  return {
-    useFlags: jest
-      .fn()
-      .mockReturnValue({ background_color: { value: "pink", enabled: true } }),
-  };
-});
+export const mockUseFlags = useFlags as jest.MockedFunction<
+  typeof realUseFlags
+>;
 
 jest.mock("./throwError", () => jest.fn());
 
