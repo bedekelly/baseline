@@ -1,6 +1,7 @@
 import { useFlags } from "flagsmith/react";
 import { Link } from "react-router-dom";
 import Button from "~/components/Button";
+import { buttonStyles } from "~/components/Button/Button";
 import throwError from "./throwError";
 
 export default function MainPage() {
@@ -24,10 +25,7 @@ export default function MainPage() {
       >
         Click me to throw an error.
       </Button>
-      <Link
-        className="text-black cursor-pointer text-mono hover:bg-black hover:text-white px-5 mt-5 py-2 text-3xl font-black text-center rounded-md bg-white"
-        to="/asdf"
-      >
+      <Link className={buttonStyles} to="/asdf">
         Go to 404 page.
       </Link>
     </div>

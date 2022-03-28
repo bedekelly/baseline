@@ -3,9 +3,9 @@ import { ButtonHTMLAttributes } from "react";
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement>;
 
-const buttonStyles = `
+export const buttonStyles = `
   cursor-pointer
-  hover:bg-gray-800
+  hover:bg-white hover:text-black
   px-5 py-2 mt-5 
   text-white
   text-3xl 
