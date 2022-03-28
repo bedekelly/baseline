@@ -16,6 +16,7 @@ A pretty good template for a React app.
 **Modern Libraries:**
 - Routing with React-Router (v6)
 - Styling with Tailwind (v3, with JIT)
+- Component library setup with Storybook (built with Vite!)
 
 **Code Quality:**
 - Precommit hooks with Husky
