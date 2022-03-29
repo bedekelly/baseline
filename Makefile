@@ -122,3 +122,8 @@ start: node_modules
 visualise: visualise.pdf
 visualise.pdf:
 	python3 generate_makefile_graph.py
+
+
+.PHONY: component
+component:
+	node scripts/makeComponent.js
