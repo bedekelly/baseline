@@ -12,6 +12,7 @@ A pretty good template for a React app.
 - Makefile targets to “cache” build steps
 - Fast builds with Vite
 - Code splitting with React.lazy()
+- 99/100 performance on Lighthouse out of the box
 
 **Modern Libraries:**
 - Routing with React-Router (v6)
@@ -24,7 +25,12 @@ A pretty good template for a React app.
 - Autoformatting with Prettier
 - Unit tests with Jest (including coverage)
 - Integration tests with Playwright
+
+**Developer Experience**
+- Storybook to work on components in isolation
+- `make component` script to create a component with tests, Storybook etc.
 - Visualised build dependencies with GraphViz
+- Tailwind-Override to define a styleable component library
 
 **Third-Party Providers**
 - Feature flags with Flagsmith
@@ -66,6 +72,7 @@ $ make start ENV=dev   # Start dev server using `.env.dev` file.
 ## More Commands
 
 ```bash
+$ make component       # Create a new component with unit test and storybook files
 $ make build           # Create a production build but don't serve it.
 $ make serve-existing  # Serve the existing production build, ignoring dependencies.
 $ make deploy          # Create production build then run deployment script.
