@@ -34,7 +34,7 @@ A pretty good template for a React app.
 
 **Third-Party Providers**
 - Feature flags with Flagsmith
-- Crash reporting with Rollbar
+- ~~Crash reporting with Rollbar~~ -- removed as it's just a script tag.
 - CI testing, linting and formatting with Travis
 
 
