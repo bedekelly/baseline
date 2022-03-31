@@ -5,7 +5,7 @@ const config: PlaywrightTestConfig = {
   webServer: {
     command: "make start",
     port: 3000,
-    timeout: 5000,
+    timeout: 10000,
     reuseExistingServer: false,
   },
 };
