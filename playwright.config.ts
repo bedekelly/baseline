@@ -6,7 +6,7 @@ const config: PlaywrightTestConfig = {
     command: "make serve-existing",
     port: 3000,
     timeout: 20 * 1000,
-    reuseExistingServer: true,
+    reuseExistingServer: false,
   },
 };
 
