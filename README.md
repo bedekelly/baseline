@@ -140,17 +140,13 @@ $ time make -Bj build
 make -Bj build  35.86s user 2.73s system 173% cpu 22.263 total
 ```
 
-## Future Features
+## Possible Future Features
 
-- Format and lint fixing on commit (instead of just checking)
-- Separate NPM package with a design system
-- Develop with that package locally with hot reloading
-- Scripts for running with local vs remote copy of design system package
-- Automatic feature/demo branch deployment
-- Create new API layer microservices with a single command
-- Create new pages with a single command
+- Format and lint _fixing_ on commit (instead of just checking)
+- Create new pages with a Makefile script
+- Pluggable "design system" package with easy switch command between local/deployed versions
 - Metrics reporting / usage
 - Two-token authentication framework (e.g. Cognito, OAuth2)
-- CMS/Authoring
-- Prerender/skeleton build
-- Multi-environment config (i.e. easy solution to create a new environment with a config)
+- Support for a CMS/authoring system like Strapi
+- Prerender/skeleton build with multiple pages to speed up first paint time
+- Makefile script to create a new automatically-deployed environment
