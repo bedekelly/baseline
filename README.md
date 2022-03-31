@@ -42,6 +42,7 @@ A pretty good template for a React app.
 
 ```bash
 git clone https://github.com/bedekelly/baseline app
+# Add Flagsmith environment tokens to `env/dev.env` and `env/prod.env`.
 cd app; make start
 ```
 
