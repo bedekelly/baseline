@@ -2,7 +2,7 @@ const prompts = require("prompts");
 const { mkdirSync, writeFileSync } = require("fs");
 
 (async () => {
-  const { componentName } = await prompts({
+  let { componentName } = await prompts({
     type: "text",
     name: "componentName",
     message: "Enter component name:",
@@ -12,6 +12,9 @@ const { mkdirSync, writeFileSync } = require("fs");
     console.log("No new components created; exiting now.");
     return;
   }
+
+  componentName = componentName[0].toUpperCase() + componentName.substring(1);
+
   const componentTemplate = `\
 type ${componentName}Props = {
   className?: string;
