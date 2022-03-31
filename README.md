@@ -1,4 +1,4 @@
-# baseline 🏁
+# base 🏁
 
 [![Build Status](https://app.travis-ci.com/bedekelly/baseline.svg?token=kgeEVrjr8Gq22pbFZQKn&branch=main)](https://app.travis-ci.com/bedekelly/baseline)
 ![Lighthouse Score: 100](https://img.shields.io/badge/Lighthouse%20Score-100-brightgreen)
