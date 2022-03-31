@@ -6,7 +6,7 @@
 # everything just by using files' last-modified timestamps.
 
 
-TS 			:= $(shell find src -iname "*.ts" -o -iname "*.tsx")
+TS 			:= $(shell find src -iname "*.ts" -o -iname "*.tsx") tsconfig.json
 TEST_FILES	:= $(shell find src -iname "*.test.*")
 CSS 		:= $(shell find src -iname "*.css")
 ENV_FILES	:= $(shell find env  -iname "*.env")
