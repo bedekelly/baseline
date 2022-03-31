@@ -127,3 +127,11 @@ visualise.pdf:
 .PHONY: component
 component:
 	node scripts/makeComponent.js
+
+.PHONY: storybook
+storybook:
+	$(BIN)/start-storybook -p 6006
+
+.PHONY: build-storybook
+build-storybook:
+	$(BIN)/build-storybook

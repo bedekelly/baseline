@@ -10,3 +10,4 @@ tailwind.config.js
 
 # CommonJS scripts:
 scripts
+storybook-static

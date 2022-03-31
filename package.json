@@ -8,8 +8,8 @@
     "deploy": "make deploy",
     "test": "make test",
     "prepare": "husky install",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "storybook": "make storybook",
+    "build-storybook": "make build-storybook"
   },
   "dependencies": {
     "react": "^17.0.2",

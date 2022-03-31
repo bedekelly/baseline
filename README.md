@@ -67,17 +67,20 @@ $ make integration  # Only run integration tests
 ```bash
 $ make serve ENV=dev   # Create and serve a production build using `.env.dev` file.
 $ make serve ENV=prod  # Create a production build using `.env.prod` file.
-$ make start ENV=dev   # Start dev server using `.env.dev` file.
+$ make start ENV=qa    # Start dev server using `.env.qa` file.
 ```
 
 ## More Commands
 
 ```bash
-$ make component       # Create a new component with unit test and storybook files
-$ make build           # Create a production build but don't serve it.
-$ make serve-existing  # Serve the existing production build, ignoring dependencies.
-$ make deploy          # Create production build then run deployment script.
-$ make visualise       # Create and open Dependencies PDF (requires Python and GraphViz).
+$ make component        # Create a new component with unit test and storybook files
+$ make storybook        # Start a live-reloading Storybook server for your components.
+$ make storybook-build  # Build your Storybook into a static site to be deployed remotely.
+
+$ make build            # Check and create a production build, but don't serve it.
+$ make serve-existing   # Serve the existing production build, ignoring dependencies.
+$ make deploy           # Create production build then run deployment script.
+$ make visualise        # Create and open Dependencies PDF (requires Python and GraphViz).
 ```
 
 ## Makefile
